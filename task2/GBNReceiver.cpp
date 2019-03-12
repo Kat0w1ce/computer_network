@@ -9,14 +9,14 @@ void GbnReceiver::receive(Packet &packet)
 	int checksum = pUtils->calculateCheckSum(packet);
 	if (checksum == packet.checksum&&expectedseqnum==packet.seqnum)
 	{
-		pUtils->printPacket("½ÓÊÕ·½ÕýÈ·ÊÕµ½±¨ÎÄ", packet);
+		pUtils->printPacket("æŽ¥æ”¶æ–¹æ­£ç¡®æ”¶åˆ°æŠ¥æ–‡", packet);
 		Message msg;
 		memcpy(msg.data, packet.payload, sizeof(packet.payload));
 		pns->delivertoAppLayer(RECEIVER, msg);
 		memcpy(lastAckPkt.payload, packet.payload, sizeof(packet.payload));
 		lastAckPkt.checksum = packet.checksum;
 		lastAckPkt.seqnum = packet.seqnum;
-		pUtils->printPacket("½ÓÊÕ·½·¢ËÍÈ·ÈÏ±¨ÎÄ", lastAckPkt);
+		pUtils->printPacket("æŽ¥æ”¶æ–¹å‘é€ç¡®è®¤æŠ¥æ–‡", lastAckPkt);
 		pns->sendToNetworkLayer(SENDER, lastAckPkt);
 		expectedseqnum = lastAckPkt.seqnum + 1;
 		//cout << expectedseqnum << endl;
@@ -25,10 +25,10 @@ void GbnReceiver::receive(Packet &packet)
 	else
 	{
 		if (checksum != packet.acknum)
-			pUtils->printPacket("½ÓÊÕ·½Ã»ÓÐÕýÈ·ÊÕµ½·¢ËÍ·½µÄ±¨ÎÄ,Êý¾ÝÐ£Ñé´íÎó", packet);
+			pUtils->printPacket("æŽ¥æ”¶æ–¹æ²¡æœ‰æ­£ç¡®æ”¶åˆ°å‘é€æ–¹çš„æŠ¥æ–‡,æ•°æ®æ ¡éªŒé”™è¯¯", packet);
 		else
-			pUtils->printPacket("½ÓÊÕ·½Ã»ÓÐÕýÈ·ÊÕµ½·¢ËÍ·½µÄ±¨ÎÄ, ±¨ÎÄÐòºÅ²»¶Ô", packet);
-		pUtils->printPacket("½ÓÊÕ·½ÖØÐÂ·¢ËÍÉÏ´ÎµÄÈ·ÈÏ±¨", lastAckPkt);
+			pUtils->printPacket("æŽ¥æ”¶æ–¹æ²¡æœ‰æ­£ç¡®æ”¶åˆ°å‘é€æ–¹çš„æŠ¥æ–‡, æŠ¥æ–‡åºå·ä¸å¯¹", packet);
+		pUtils->printPacket("æŽ¥æ”¶æ–¹é‡æ–°å‘é€ä¸Šæ¬¡çš„ç¡®è®¤æŠ¥", lastAckPkt);
 		pns->sendToNetworkLayer(SENDER, lastAckPkt);
 	}
 }
