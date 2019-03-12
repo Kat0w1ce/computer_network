@@ -12,7 +12,7 @@ bool GbnSender::send(Message& message)
 	newPacket->checksum = 0;
 	memcpy(newPacket->payload, message.data, sizeof(message.data));
 	newPacket->checksum = pUtils->calculateCheckSum(*newPacket);
-	pUtils->printPacket("·¢ËÍ·½·¢ËÍ±¨ÎÄ", *newPacket);
+	pUtils->printPacket("å‘é€æ–¹å‘é€æŠ¥æ–‡", *newPacket);
 	pns->startTimer(SENDER, Configuration::TIME_OUT, newPacket->seqnum);
 	pns->sendToNetworkLayer(RECEIVER, *newPacket);
 	nextseqnum++;
@@ -27,7 +27,7 @@ void GbnSender::receive(Packet &ackPkt)
 {
 	//auto p = senderbuffer.begin();
 	//cout << (pUtils->calculateCheckSum(ackPkt))<<"  "<<ackPkt.checksum << endl;
-	//pUtils->printPacket("½ÓÊÕµÄ±¨ÎÄ", ackPkt);
+	//pUtils->printPacket("æŽ¥æ”¶çš„æŠ¥æ–‡", ackPkt);
 	  //todo
 	//{
 	//cout << senderbuffer.size() << endl;
@@ -42,23 +42,23 @@ void GbnSender::receive(Packet &ackPkt)
 			int cnt = 0;
 			//base = 1 + senderbuffer.begin()->seqnum;
 			//if(!senderbuffer.empty())
-			of << "·¢ËÍ·½´°¿Ú»¬¶¯:" << senderbuffer.begin()->seqnum;
+			of << "å‘é€æ–¹çª—å£æ»‘åŠ¨:" << senderbuffer.begin()->seqnum;
 			while (!senderbuffer.empty()&&senderbuffer.begin()->seqnum<=ackPkt.seqnum)
 			{
-				pUtils->printPacket("·¢ËÍ·½½ÓÊÕÈ·ÈÏ", *senderbuffer.begin());
+				pUtils->printPacket("å‘é€æ–¹æŽ¥æ”¶ç¡®è®¤", *senderbuffer.begin());
 				pns->stopTimer(SENDER, senderbuffer.begin()->seqnum);
 				cnt++;
 				//getchar();
 				senderbuffer.pop_front();
 			}
-			of << "»¬¶¯³¤¶È:  " << cnt << endl;
+			of << "æ»‘åŠ¨é•¿åº¦:  " << cnt << endl;
 		}
 		else
 		{
-			pUtils->printPacket("·¢ËÍ·½ackÐ£Ñé´íÎó", ackPkt);
+			pUtils->printPacket("å‘é€æ–¹ackæ ¡éªŒé”™è¯¯", ackPkt);
 			/*for (; fpacket != senderbuffer.end(); ++fpacket)
 			{
-				pUtils->printPacket("·¢ËÍ·½Ã»ÓÐÕýÈ·ÊÕµ½È·ÈÏ£¬ÖØ´«", *fpacket);
+				pUtils->printPacket("å‘é€æ–¹æ²¡æœ‰æ­£ç¡®æ”¶åˆ°ç¡®è®¤ï¼Œé‡ä¼ ", *fpacket);
 				pns->stopTimer(SENDER, fpacket->seqnum);
 				pns->startTimer(SENDER, Configuration::TIME_OUT, fpacket->seqnum);
 				pns->sendToNetworkLayer(RECEIVER, *fpacket);
@@ -72,7 +72,7 @@ void GbnSender::timeoutHandler(int seqnum)
 
 	for (auto pp = senderbuffer.begin(); pp != senderbuffer.end(); ++pp)
 	{
-		pUtils->printPacket("³¬Ê±ÖØ´«", *pp);
+		pUtils->printPacket("è¶…æ—¶é‡ä¼ ", *pp);
 		pns->stopTimer(SENDER, pp->seqnum);
 		pns->startTimer(SENDER, Configuration::TIME_OUT, pp->seqnum);
 		pns->sendToNetworkLayer(RECEIVER, *pp);
